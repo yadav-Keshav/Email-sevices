@@ -2,10 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const res = require('express/lib/response');
 const nodemailer = require('nodemailer');
-
+const cors = require('cors');
 const app = express();
 app.use(express.json());
+app.use(cors());
 
+
+process.on('uncaughtException', (err) => {
+    console.log(`Server is stopped due to ${err.message}`);
+})
 
 
 app.post("/", async (req, res) => {
@@ -28,7 +33,9 @@ app.post("/", async (req, res) => {
         await transporter.sendMail({
             from: process.env.USER,
             to: req.body.email,
-            text: req.body.text
+            subject: req.body.subject,
+            text: req.body.text,
+            html: req.body.html
 
         })
         return res.json({
@@ -44,6 +51,12 @@ app.post("/", async (req, res) => {
     }
 })
 
-app.listen(4000, () => {
-    console.log('Server is Listening on Port : 4000');
+const server = app.listen(process.env.PORT, () => {
+    console.log(`Server is Listening on Port : ${process.env.PORT}`);
+})
+
+process.on('unhandledRejection', (err) => {
+    console.log(`Server is Stopped due to ${err.message}`)
+    server.close();
+    process.exit(1);
 })
