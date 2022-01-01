@@ -12,6 +12,9 @@ process.on('uncaughtException', (err) => {
     console.log(`Server is stopped due to ${err.message}`);
 })
 
+app.get("/",async(req,res)=>{
+    res.send({message:'service is working make post request to send email ' });
+})
 
 app.post("/", async (req, res) => {
     try {
