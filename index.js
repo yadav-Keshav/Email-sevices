@@ -50,9 +50,9 @@ app.post("/", async (req, res) => {
         })
     }
 })
-
-const server = app.listen(process.env.PORT, () => {
-    console.log(`Server is Listening on Port : ${process.env.PORT}`);
+const PORT = process.env.PORT || 4000;
+const server = app.listen(PORT, () => {
+    console.log(`Server is Listening on Port : ${PORT}`);
 })
 
 process.on('unhandledRejection', (err) => {
